@@ -5,6 +5,7 @@ from loader import (
 )
 
 from heuristic import greedy_tsp
+from exact import held_karp_tsp
 
 def main():
     # Load seluruh dataset #
@@ -51,6 +52,18 @@ def main():
     print("\nTotal Distance:")
     print(total_distance, "km")
 
+
+    # Menjalankan Dynamic Programming (Exact)
+
+    route_exact, distance_exact = held_karp_tsp(distance_matrix)
+
+    print("\nEXACT RESULT")
+
+    print("Route (ID):")
+    print(route_exact)
+
+    print("\nTotal Distance:")
+    print(distance_exact, "km")
 
 if __name__ == "__main__":
     main()
