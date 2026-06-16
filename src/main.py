@@ -66,6 +66,15 @@ def main():
             )
         )
 
+        server_cost_greedy = calculate_server_cost(
+            execution_time
+        )
+
+        tco_cost_greedy = calculate_tco(
+            fuel_cost_greedy,
+            server_cost_greedy
+        )
+
         print("\nGREEDY RESULT")
 
         print("Route (ID):")
@@ -92,6 +101,24 @@ def main():
 
         end_time = time.perf_counter()
         exact_execution_time = (end_time - start_time)
+
+        fuel_used_exact, fuel_cost_exact = (
+            calculate_fuel_cost(
+                route_exact,
+                distance_matrix,
+                locations,
+                scenario["fuel_price"]
+            )
+        )   
+
+        server_cost_exact = calculate_server_cost(
+            exact_execution_time
+        )
+
+        tco_exact = calculate_tco(
+            fuel_cost_exact,
+            server_cost_exact
+        )
 
         print("\nEXACT RESULT")
 
