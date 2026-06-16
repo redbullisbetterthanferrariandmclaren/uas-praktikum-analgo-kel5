@@ -70,15 +70,22 @@ def main():
             execution_time
         )
 
-        tco_cost_greedy = calculate_tco(
+        tco_greedy = calculate_tco(
             fuel_cost_greedy,
             server_cost_greedy
         )
 
         print("\nGREEDY RESULT")
 
-        print("Route (ID):")
-        print(route)
+        print("\nRoute:")
+
+        for i in range(len(route)):
+            print(locations[route[i]]["name"], end="")
+
+            if i != len(route)-1:
+                print(" -> ", end="")
+
+        print()
 
         print("\nTotal Distance:")
         print(total_distance, "km")
@@ -92,6 +99,11 @@ def main():
         print("\nFuel Cost:")
         print(f"Rp {fuel_cost_greedy:,.2f}")
 
+        print("\nServer Cost:")
+        print(f"Rp {server_cost_greedy:,.2f}")
+
+        print("\nTCO:")
+        print(f"Rp {tco_greedy:,.2f}")
 
         # Menjalankan Dynamic Programming (Exact)
 
@@ -122,8 +134,15 @@ def main():
 
         print("\nEXACT RESULT")
 
-        print("Route (ID):")
-        print(route_exact)
+        print("\nRoute:")
+
+        for i in range(len(route_exact)):
+            print(locations[route_exact[i]]["name"], end="")
+
+            if i != len(route_exact)-1:
+                print(" -> ", end="")
+
+        print()
 
         print("\nTotal Distance:")
         print(distance_exact, "km")
@@ -136,6 +155,24 @@ def main():
 
         print("\nFuel Cost:")
         print(f"Rp {fuel_cost_exact:,.2f}")
+
+        print("\nServer Cost:")
+        print(f"Rp {server_cost_exact:,.2f}")
+
+        print("\nTCO:")
+        print(f"Rp {tco_exact:,.2f}")
+
+        print("\n===========================")
+        print("PERBANDINGAN")
+        print("===========================")
+
+        print(f"Greedy TCO : Rp {tco_greedy:,.2f}")
+        print(f"Exact TCO  : Rp {tco_exact:,.2f}")
+
+        if tco_greedy < tco_exact:
+            print("\nRekomendasi: Gunakan Greedy")
+        else:
+            print("\nRekomendasi: Gunakan Exact")
 
 if __name__ == "__main__":
     main()
