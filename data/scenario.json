@@ -1,0 +1,12 @@
+{
+    "scenarios": [
+        {
+            "name": "Subsidy",
+            "fuel_price": 5000
+        },
+        {
+            "name": "Crisis",
+            "fuel_price": 20000
+        }
+    ]
+}
