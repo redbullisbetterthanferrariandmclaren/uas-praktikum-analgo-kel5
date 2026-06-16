@@ -47,68 +47,68 @@ def main():
             f"Harga BBM: Rp {scenario['fuel_price']}/liter"
         )
 
-    # Menjalankan Greedy #
+        # Menjalankan Greedy #
 
-    start_time = time.perf_counter()
+        start_time = time.perf_counter()
 
-    route, total_distance = greedy_tsp(distance_matrix)
+        route, total_distance = greedy_tsp(distance_matrix)
 
-    end_time = time.perf_counter()
+        end_time = time.perf_counter()
 
-    execution_time = (end_time-start_time)
+        execution_time = (end_time-start_time)
 
-    fuel_used_greedy, fuel_cost_greedy = (
-        calculate_fuel_cost(
-            route,
-            distance_matrix,
-            locations,
-            scenario["fuel_price"]
+        fuel_used_greedy, fuel_cost_greedy = (
+            calculate_fuel_cost(
+                route,
+                distance_matrix,
+                locations,
+                scenario["fuel_price"]
+            )
         )
-    )
 
-    print("\nGREEDY RESULT")
+        print("\nGREEDY RESULT")
 
-    print("Route (ID):")
-    print(route)
+        print("Route (ID):")
+        print(route)
 
-    print("\nTotal Distance:")
-    print(total_distance, "km")
+        print("\nTotal Distance:")
+        print(total_distance, "km")
 
-    print("\nExecution Time:")
-    print(f"{execution_time:.8f} sec")
+        print("\nExecution Time:")
+        print(f"{execution_time:.8f} sec")
 
-    print("\nFuel Used:")
-    print(f"{fuel_used_greedy:.4f} liter")
+        print("\nFuel Used:")
+        print(f"{fuel_used_greedy:.4f} liter")
 
-    print("\nFuel Cost:")
-    print(f"Rp {fuel_cost_greedy:,.2f}")
+        print("\nFuel Cost:")
+        print(f"Rp {fuel_cost_greedy:,.2f}")
 
 
-    # Menjalankan Dynamic Programming (Exact)
+        # Menjalankan Dynamic Programming (Exact)
 
-    start_time = time.perf_counter()
+        start_time = time.perf_counter()
 
-    route_exact, distance_exact = held_karp_tsp(distance_matrix)
+        route_exact, distance_exact = held_karp_tsp(distance_matrix)
 
-    end_time = time.perf_counter()
-    exact_execution_time = (end_time - start_time)
+        end_time = time.perf_counter()
+        exact_execution_time = (end_time - start_time)
 
-    print("\nEXACT RESULT")
+        print("\nEXACT RESULT")
 
-    print("Route (ID):")
-    print(route_exact)
+        print("Route (ID):")
+        print(route_exact)
 
-    print("\nTotal Distance:")
-    print(distance_exact, "km")
+        print("\nTotal Distance:")
+        print(distance_exact, "km")
 
-    print("\nExecution Time:")
-    print(f"{exact_execution_time: .8f} sec")
+        print("\nExecution Time:")
+        print(f"{exact_execution_time: .8f} sec")
 
-    print("\nFuel Used:")
-    print(f"{fuel_used_exact:.4f} liter")
+        print("\nFuel Used:")
+        print(f"{fuel_used_exact:.4f} liter")
 
-    print("\nFuel Cost:")
-    print(f"Rp {fuel_cost_exact:,.2f}")
+        print("\nFuel Cost:")
+        print(f"Rp {fuel_cost_exact:,.2f}")
 
 if __name__ == "__main__":
     main()
