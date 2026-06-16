@@ -66,6 +66,8 @@ def held_karp_tsp(distance_matrix):
     last_node = -1
 
     for k in range(1, n):
+        if (full_mask, k) not in dp:
+            continue
 
         cost = (
             dp[(full_mask, k)]
