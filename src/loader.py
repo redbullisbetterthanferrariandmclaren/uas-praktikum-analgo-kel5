@@ -11,8 +11,8 @@ def load_locations(filename):
         for row in reader:
             locations.append({
                 "id": int(row["id"]),
-                "name": row["name"],
-                "weight": float(row["weight"])
+                "name": row["locations"],
+                "weight": float(row["weight (kg)"])
             })
 
     return locations
@@ -22,11 +22,15 @@ def load_locations(filename):
 def load_distance_matrix(filename):
     matrix = []
 
-    with open(filename, mode="r", newline="", encoding="utf-8") as file:
+    with open(filename, mode="r", encoding="utf-8") as file:
         reader = csv.reader(file)
 
+        # Lewati header pertama
+        next(reader)
+
         for row in reader:
-            matrix.append([float(x) for x in row])
+            # Ambil mulai kolom kedua (skip ID)
+            matrix.append([float(x) for x in row[1:]])
 
     return matrix
 

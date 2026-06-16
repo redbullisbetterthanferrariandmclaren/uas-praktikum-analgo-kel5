@@ -4,16 +4,20 @@ from loader import (
     load_scenario
 )
 
+from heuristic import greedy_tsp
+
 def main():
     # Load seluruh dataset #
-    locations = load_locations("../data/locations.csv")
+    locations = load_locations(
+        "data/locations_dataset.csv"
+    )
 
     distance_matrix = load_distance_matrix(
-        "../data/distance_matrix.csv"
+        "data/distance_matrix_dataset.csv"
     )
 
     scenario_data = load_scenario(
-        "../data/scenario.json"
+        "data/scenario.json"
     )
 
     # Menampilkan data #
@@ -35,23 +39,17 @@ def main():
             f"Harga BBM: Rp {scenario['fuel_price']}/liter"
         )
 
-    # ==========================
-    # Nanti lanjut di sini
-    # ==========================
+    # Menjalankan Greedy #
 
-    # for scenario in scenario_data["scenarios"]:
-    #
-    #     route_greedy = greedy(...)
-    #
-    #     route_exact = backtracking(...)
-    #
-    #     fuel_cost = calculate_fuel(...)
-    #
-    #     server_cost = calculate_server(...)
-    #
-    #     tco = calculate_tco(...)
-    #
-    #     print hasil
+    route, total_distance = greedy_tsp(distance_matrix)
+
+    print("\nGREEDY RESULT")
+
+    print("Route (ID):")
+    print(route)
+
+    print("\nTotal Distance:")
+    print(total_distance, "km")
 
 
 if __name__ == "__main__":
