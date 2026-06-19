@@ -17,58 +17,48 @@ from heuristic import greedy_tsp
 from exact import held_karp_tsp
 
 def main():
-    # Load seluruh dataset #
-    locations = load_locations(
-        "data/locations_dataset.csv"
-    )
+    ## Memuat Seluruh Dataset ##
+    locations = load_locations("data/locations_dataset.csv")
+    distance_matrix = load_distance_matrix("data/distance_matrix_dataset.csv")
+    scenario_data = load_scenario("data/scenario.json")
 
-    distance_matrix = load_distance_matrix(
-        "data/distance_matrix_dataset.csv"
-    )
+    ## Menampilkan Data Input ##
+    print("\nI. DATA INPUT\n")
 
-    scenario_data = load_scenario(
-        "data/scenario.json"
-    )
-
-    # Menampilkan data #
-    print("\nDATA BERHASIL DIINPUT\n")
-
-    print("DATA LOKASI")
+    print("Locations Dataset:")
     for location in locations:
         print(location)
 
-    print("\nDISTANCE MATRIX")
+    print("\nDistance Matrix Dataset:")
     for row in distance_matrix:
         print(row)
 
-    print("\nSCENARIO EKONOMI")
+    print("\n\nII. ALGORITHMS SIMULATION")
 
-    # Data untuk grafik
-
+    ## MENYIMPAN DATA UNTUK GRAFIK Menyimpan Data untuk Grafik ##
     labels = []
-
     execution_times = []
-
     fuel_costs = []
-
     tco_values = []
 
-    for scenario in scenario_data["scenarios"]:
+    ## Simulasi Setiap Skenario ##
+    for i, scenario in enumerate(
+        scenario_data["scenarios"],
+        start=1
+    ):
         print(
-            f"{scenario['name']} - "
+            f"\n\n{i}. {scenario['name']} - "
             f"Harga BBM: Rp {scenario['fuel_price']}/liter"
         )
 
-        # Menjalankan Greedy #
 
+        ### ALGORITMA GREEDY ###
         start_time = time.perf_counter()
-
         route, total_distance = greedy_tsp(distance_matrix)
-
         end_time = time.perf_counter()
-
         execution_time = (end_time-start_time)
 
+        # Menghitung Fuel Cost
         fuel_used_greedy, fuel_cost_greedy = (
             calculate_fuel_cost(
                 route,
@@ -78,54 +68,39 @@ def main():
             )
         )
 
-        server_cost_greedy = calculate_server_cost(
-            execution_time
-        )
+        # Menghitung Server Cost
+        server_cost_greedy = calculate_server_cost(execution_time)
 
-        tco_greedy = calculate_tco(
-            fuel_cost_greedy,
-            server_cost_greedy
-        )
+        # Menghitung Total Cost of Ownership
+        tco_greedy = calculate_tco(fuel_cost_greedy, server_cost_greedy)
 
-        print("\nGREEDY RESULT")
-
+        print(f"\n\n{i}a. Basic Heuristic Algorithm (Greedy NN)")
         print("\nRoute:")
 
-        for i in range(len(route)):
-            print(locations[route[i]]["name"], end="")
+        for j in range(len(route)):
+            print(locations[route[j]]["name"], end="")
 
-            if i != len(route)-1:
+            if j != len(route)-1:
                 print(" -> ", end="")
+        
+        print("\n\n- Performance Metrics -")
+        print("Total Distance:", total_distance, "km")
+        print("Execution Time:", f"{execution_time:.8f} sec")
+        print("Fuel Used:", f"{fuel_used_greedy:.4f} liter")
 
-        print()
+        print("\n- Cost Breakdown -")
+        print("Fuel Cost:", f"Rp {fuel_cost_greedy:,.2f}")
+        print("Server Cost:", f"Rp {server_cost_greedy:,.2f}")
+        print("TCO:", f"Rp {tco_greedy:,.2f}")
 
-        print("\nTotal Distance:")
-        print(total_distance, "km")
 
-        print("\nExecution Time:")
-        print(f"{execution_time:.8f} sec")
-
-        print("\nFuel Used:")
-        print(f"{fuel_used_greedy:.4f} liter")
-
-        print("\nFuel Cost:")
-        print(f"Rp {fuel_cost_greedy:,.2f}")
-
-        print("\nServer Cost:")
-        print(f"Rp {server_cost_greedy:,.2f}")
-
-        print("\nTCO:")
-        print(f"Rp {tco_greedy:,.2f}")
-
-        # Menjalankan Dynamic Programming (Exact)
-
+        ### ALGORITMA EXACT (HELD-KARP DP) ###
         start_time = time.perf_counter()
-
         route_exact, distance_exact = held_karp_tsp(distance_matrix)
-
         end_time = time.perf_counter()
         exact_execution_time = (end_time - start_time)
 
+        # Menghitung Fuel Cost
         fuel_used_exact, fuel_cost_exact = (
             calculate_fuel_cost(
                 route_exact,
@@ -135,150 +110,84 @@ def main():
             )
         )   
 
-        server_cost_exact = calculate_server_cost(
-            exact_execution_time
-        )
+        # Menghitung Server Cost
+        server_cost_exact = calculate_server_cost(exact_execution_time)
 
-        tco_exact = calculate_tco(
-            fuel_cost_exact,
-            server_cost_exact
-        )
+        # Menghitung Total Cost of Ownership
+        tco_exact = calculate_tco(fuel_cost_exact, server_cost_exact)
 
-        # Simpan data untuk grafik
+        # Menyimpan data untuk grafik
+        labels.append(f"Greedy\n{scenario['name']}")
+        execution_times.append(execution_time)
+        fuel_costs.append(fuel_cost_greedy)
+        tco_values.append(tco_greedy)
+        labels.append(f"Exact\n{scenario['name']}")
+        execution_times.append(exact_execution_time)
+        fuel_costs.append(fuel_cost_exact)
+        tco_values.append(tco_exact)
 
-        labels.append(
-            f"Greedy\n{scenario['name']}"
-        )
-
-        execution_times.append(
-            execution_time
-        )
-
-        fuel_costs.append(
-            fuel_cost_greedy
-        )
-
-        tco_values.append(
-            tco_greedy
-        )
-
-        labels.append(
-            f"Exact\n{scenario['name']}"
-        )
-
-        execution_times.append(
-            exact_execution_time
-        )
-
-        fuel_costs.append(
-            fuel_cost_exact
-        )
-
-        tco_values.append(
-            tco_exact
-        )
-
-        print("\nEXACT RESULT")
-
+        print(f"\n\n{i}b. Algoritma Eksak (Held-Karp DP)")
         print("\nRoute:")
 
-        for i in range(len(route_exact)):
-            print(locations[route_exact[i]]["name"], end="")
+        for j in range(len(route_exact)):
+            print(locations[route_exact[j]]["name"], end="")
 
-            if i != len(route_exact)-1:
+            if j != len(route_exact)-1:
                 print(" -> ", end="")
 
-        print()
+        print("\n\n- Performance Metrics -")
+        print("Total Distance:", distance_exact, "km")
+        print("Execution Time:", f"{exact_execution_time: .8f} sec")
+        print("Fuel Used:", f"{fuel_used_exact:.4f} liter")
 
-        print("\nTotal Distance:")
-        print(distance_exact, "km")
+        print("\n- Cost Breakdown -")
+        print("Fuel Cost:", f"Rp {fuel_cost_exact:,.2f}")
+        print("Server Cost:", f"Rp {server_cost_exact:,.2f}")
+        print("TCO:", f"Rp {tco_exact:,.2f}")
 
-        print("\nExecution Time:")
-        print(f"{exact_execution_time: .8f} sec")
+        print("\n\n--- PERBANDINGAN ---")
+        print(f"Heuristic TCO: Rp {tco_greedy:,.2f}")
+        print(f"Exact TCO: Rp {tco_exact:,.2f}")
 
-        print("\nFuel Used:")
-        print(f"{fuel_used_exact:.4f} liter")
-
-        print("\nFuel Cost:")
-        print(f"Rp {fuel_cost_exact:,.2f}")
-
-        print("\nServer Cost:")
-        print(f"Rp {server_cost_exact:,.2f}")
-
-        print("\nTCO:")
-        print(f"Rp {tco_exact:,.2f}")
-
-        print("\n===========================")
-        print("PERBANDINGAN")
-        print("===========================")
-
-        print(f"Greedy TCO : Rp {tco_greedy:,.2f}")
-        print(f"Exact TCO  : Rp {tco_exact:,.2f}")
-
+        print("\nRecommendation:")
         if tco_greedy < tco_exact:
-            print("\nRekomendasi: Gunakan Greedy")
+            print("Use Heuristic")
+        elif tco_greedy > tco_exact:
+            print("Use Exact")
         else:
-            print("\nRekomendasi: Gunakan Exact")
+            print("Use Anything You Want")
 
-    # GRAFIK EXECUTION TIME
 
+    ### VISUALISASI GRAFIK PERBANDINGAN EXECUTION TIME ###
     plt.figure(figsize=(8,5))
-
     plt.bar(labels, execution_times)
-
     plt.title("Execution Time Comparison")
-
     plt.ylabel("Time (seconds)")
-
     plt.tight_layout()
-
-    plt.savefig(
-        "docs/execution_time.png"
-    )
-
+    plt.savefig("docs/execution_time.png")
     plt.close()
 
-    # GRAFIK FUEL COST
 
+    ### VISUALISASI GRAFIK PERBANDINGAN FUEL COST ###
     plt.figure(figsize=(8,5))
-
     plt.bar(labels, fuel_costs)
-
     plt.title("Fuel Cost Comparison")
-
     plt.ylabel("Fuel Cost (Rp)")
-
     plt.tight_layout()
-
-    plt.savefig(
-        "docs/fuel_cost.png"
-    )
-
+    plt.savefig("docs/fuel_cost.png")
     plt.close()
 
-    # GRAFIK TCO
-
+    ### VISUALISASI GRAFIK PERBANDINGAN TCO ###
     plt.figure(figsize=(8,5))
-
     plt.bar(labels, tco_values)
-
-    plt.title(
-        "Total Cost of Ownership Comparison"
-    )
-
+    plt.title("Total Cost of Ownership Comparison")
     plt.ylabel("TCO (Rp)")
-
     plt.tight_layout()
-
-    plt.savefig(
-        "docs/tco.png"
-    )
-
+    plt.savefig("docs/tco.png")
     plt.close()
 
-    print(
-        "\nSemua grafik berhasil disimpan di folder docs/"
-    )
+    print("\n\nConfirmation:")
+    print("All graphic visualizations were successfully saved to the docs/ folder")
 
 if __name__ == "__main__":
     main()
