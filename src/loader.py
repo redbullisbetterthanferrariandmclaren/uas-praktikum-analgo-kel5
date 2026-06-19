@@ -8,17 +8,18 @@ def load_locations(filename):
     with open(filename, mode="r", newline="", encoding="utf-8") as file:
         reader = csv.DictReader(file)
 
+        # Menyimpan setiap baris ke dalam list
         for row in reader:
             locations.append({
                 "id": int(row["id"]),
                 "name": row["locations"],
-                "weight": float(row["weight (kg)"])
+                "weight (kg)": float(row["weight (kg)"])
             })
 
     return locations
 
 
-# Membaca matriks jarak #
+# Membaca matriks jarak antar lokasi #
 def load_distance_matrix(filename):
     matrix = []
 
@@ -28,8 +29,8 @@ def load_distance_matrix(filename):
         # Lewati header pertama
         next(reader)
 
+        # Mengambil nilai matriks mulai dari kolom kedua
         for row in reader:
-            # Ambil mulai kolom kedua (skip ID)
             matrix.append([float(x) for x in row[1:]])
 
     return matrix
