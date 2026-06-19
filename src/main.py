@@ -1,3 +1,6 @@
+import time
+import matplotlib.pyplot as plt
+
 from loader import (
     load_locations,
     load_distance_matrix,
@@ -11,7 +14,6 @@ from cost import (
 )
 
 from heuristic import greedy_tsp
-import time
 from exact import held_karp_tsp
 
 def main():
@@ -40,6 +42,16 @@ def main():
         print(row)
 
     print("\nSCENARIO EKONOMI")
+
+    # Data untuk grafik
+
+    labels = []
+
+    execution_times = []
+
+    fuel_costs = []
+
+    tco_values = []
 
     for scenario in scenario_data["scenarios"]:
         print(
@@ -132,6 +144,40 @@ def main():
             server_cost_exact
         )
 
+        # Simpan data untuk grafik
+
+        labels.append(
+            f"Greedy\n{scenario['name']}"
+        )
+
+        execution_times.append(
+            execution_time
+        )
+
+        fuel_costs.append(
+            fuel_cost_greedy
+        )
+
+        tco_values.append(
+            tco_greedy
+        )
+
+        labels.append(
+            f"Exact\n{scenario['name']}"
+        )
+
+        execution_times.append(
+            exact_execution_time
+        )
+
+        fuel_costs.append(
+            fuel_cost_exact
+        )
+
+        tco_values.append(
+            tco_exact
+        )
+
         print("\nEXACT RESULT")
 
         print("\nRoute:")
@@ -173,6 +219,66 @@ def main():
             print("\nRekomendasi: Gunakan Greedy")
         else:
             print("\nRekomendasi: Gunakan Exact")
+
+    # GRAFIK EXECUTION TIME
+
+    plt.figure(figsize=(8,5))
+
+    plt.bar(labels, execution_times)
+
+    plt.title("Execution Time Comparison")
+
+    plt.ylabel("Time (seconds)")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        "docs/execution_time.png"
+    )
+
+    plt.close()
+
+    # GRAFIK FUEL COST
+
+    plt.figure(figsize=(8,5))
+
+    plt.bar(labels, fuel_costs)
+
+    plt.title("Fuel Cost Comparison")
+
+    plt.ylabel("Fuel Cost (Rp)")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        "docs/fuel_cost.png"
+    )
+
+    plt.close()
+
+    # GRAFIK TCO
+
+    plt.figure(figsize=(8,5))
+
+    plt.bar(labels, tco_values)
+
+    plt.title(
+        "Total Cost of Ownership Comparison"
+    )
+
+    plt.ylabel("TCO (Rp)")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        "docs/tco.png"
+    )
+
+    plt.close()
+
+    print(
+        "\nSemua grafik berhasil disimpan di folder docs/"
+    )
 
 if __name__ == "__main__":
     main()
