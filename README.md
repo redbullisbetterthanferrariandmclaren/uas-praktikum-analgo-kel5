@@ -1,7 +1,5 @@
 # Optimasi Rute Last Mile Delivery Menggunakan Greedy Nearest Neighbor dan Held-Karp Dynamic Programming
 
-<img width="2848" height="2480" alt="graf" src="https://github.com/user-attachments/assets/886ec820-9d7a-4c67-a9c6-f9728a5f56ff" />
-
 ## Deskripsi Proyek
 
 Proyek ini dibuat untuk memenuhi Tugas Besar Praktikum Analisis Algoritma.
@@ -245,7 +243,7 @@ Dengan model biaya yang digunakan pada proyek ini, **algoritma Held-Karp sudah m
 # Visualisasi
 
 ## Gambar Graf Lokasi
-![Execution Time](docs/locations_graph.jpeg)
+<img width="2848" height="2480" alt="graf" src="https://github.com/user-attachments/assets/886ec820-9d7a-4c67-a9c6-f9728a5f56ff" />
 ---
 
 ## Perbandingan Execution Time
