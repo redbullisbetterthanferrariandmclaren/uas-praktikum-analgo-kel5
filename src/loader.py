@@ -13,7 +13,7 @@ def load_locations(filename):
             locations.append({
                 "id": int(row["id"]),
                 "name": row["locations"],
-                "weight (kg)": float(row["weight (kg)"])
+                "weight": float(row["weight (kg)"])
             })
 
     return locations
